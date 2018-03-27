@@ -1,0 +1,190 @@
+
+        <header>
+
+            <!-- *** TOP ***
+_________________________________________________________ -->
+            <div id="top">
+                <div class="container">
+                    <div class="row">
+			<div class="col-xs-2">
+                            <div class="social">
+                                <a href="#" class="external facebook" data-animate-hover="pulse"><i class="fa fa-facebook"></i></a>
+                                <a href="#" class="external gplus" data-animate-hover="pulse"><i class="fa fa-google-plus"></i></a>
+                                <a href="#" class="external twitter" data-animate-hover="pulse"><i class="fa fa-twitter"></i></a>
+                                <a href="#" class="email" data-animate-hover="pulse"><i class="fa fa-envelope"></i></a>
+                            </div>
+                        </div>
+                        {% if log==0 %}
+                        <div class="col-xs-10 contact">
+			    <a href="{{url_for('showLogin')}}" class="hidden-sm hidden-xs pull-right" data-animate-hover="pulse">login</a>
+                            
+                        </div>
+                        {% else %}
+                        <div class="col-md-2 text-right">
+            <a href="{{url_for('gdisconnect')}}" class="hidden-sm hidden-xs pull-right" data-animate-hover="pulse">Logout </a>
+        </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- *** TOP END *** -->
+
+            <!-- *** NAVBAR ***
+    _________________________________________________________ -->
+
+            <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+                <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+                    <div class="container">
+                        <div class="navbar-header">
+
+                            <a class="navbar-brand home" href="index.html">
+                                <img src="https://c1.staticflickr.com/5/4670/39231683115_d721c5e560_o.png" alt="Universal logo" class="hidden-xs hidden-sm" style="height:50px;width:70px;">
+                                <img src="https://c1.staticflickr.com/5/4670/39231683115_d721c5e560_o.png" alt="Universal logo" class="visible-xs visible-sm"><span class="sr-only">Universal - go to homepage</span>
+                            </a>
+                            <div class="navbar-buttons">
+                                <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <i class="fa fa-align-justify"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!--/.navbar-header -->
+
+                        <div class="navbar-collapse collapse" id="navigation">
+
+                            <ul class="nav navbar-nav navbar-right">
+				{% if flag==1 %}
+                                <li class="dropdown active">
+				<a href="index.html" >Home </a>
+                                </li>
+				<li class="dropdown">
+                                    <a href="#events" >Events </a>
+                                </li>
+				<li class="dropdown">
+                                    <a href="#bs" >Best sellers </a>
+                                </li>
+				{% else %}
+				<li class="dropdown">
+				<a href="index.html" >Home </a>
+                                </li>
+				{% endif %}
+                                    
+                                <li class="dropdown use-yamm yamm-fw">
+									<a href="catalog.html" >Catalog </a>
+                                </li>
+								
+                                <!-- ========== FULL WIDTH MEGAMENU ================== -->
+				{% if flag==2 %}
+                                <li class="dropdown use-yamm yamm-fw active">
+				{% else %}
+				<li class="dropdown use-yamm yamm-fw">
+				{% endif %}
+                                
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Products <b class="caret"></b></a>
+                                    <ul class="dropdown-menu longdrop">
+                                        <li>
+                                            <div class="yamm-content">
+                                                <div class="row" style="height:100%;">
+                                                    <div class="col-sm-2">
+                                                        <a href="#menuid"><h5>Chafing Dishes</h5></a>
+                                                        <ul>
+                                                            <li><a href="chafing.html">Main Menu</a>
+                                                            </li>
+															{% for i in chaf %}
+                                                            <li><a href="{{url_for('productdetail', productid=i.id)}}">{{i.id}}</a>
+                                                            </li>
+
+
+															{% endfor %}
+                                                            </ul>
+														</div>
+														<div class="col-sm-2">
+                                                        <a href="#menuid"><h5>Tableware</h5></a>
+                                                        <ul>
+                                                            <li><a href="tableware.html">Main Menu</a>
+                                                            </li>
+															{% for i in table %}
+                                                            <li><a href="{{url_for('productdetail', productid=i.id)}}">{{i.id}}</a>
+                                                            </li>
+															{% endfor %}
+                                                            </ul>
+														</div>
+														<div class="col-sm-2">
+                                                        <a href="#menuid"><h5>Houseware</h5></a>
+                                                        <ul>
+                                                            <li><a href="houseware.html">Main Menu</a>
+                                                            </li>
+															{% for i in house %}
+                                                            <li><a href="{{url_for('productdetail', productid=i.id)}}">{{i.id}}</a>
+                                                            </li>
+															{% endfor %}
+                                                            <li><a href="HW-801.html">HW-801</a>
+                                                            </li>
+															</ul>
+														</div>
+                                                    <div class="col-sm-2">
+                                                    
+                                                        <a href="#menuid"><h5>Counters</h5></a>
+                                                        <ul>
+                                                            <li><a href="counters.html">Main Menu</a>
+                                                            </li>
+															{% for i in counter %}
+                                                            <li><a href="{{url_for('productdetail', productid=i.id)}}">{{i.id}}</a>
+                                                            </li>
+															{% endfor %}
+                                                        </ul>
+</div>
+<div class="col-sm-2">
+														<a href="#menuid"><h5>Trolleys and Bins</h5></a>
+                                                        <ul>
+                                                            <li><a href="tnb.html">Main Menu</a>
+                                                            </li>
+															{% for i in tab %}
+                                                            <li><a href="{{url_for('productdetail', productid=i.id)}}">{{i.id}}</a>
+                                                            </li>
+															{% endfor %}
+                                                            </ul>
+															</div>
+                                            </div>
+                                            <!-- /.yamm-content -->
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- ========== FULL WIDTH MEGAMENU END ================== -->
+
+                                <li class="dropdown">
+                                    <a href="javascript: void(0)" class="dropdown-toggle" data-toggle="dropdown">Contact <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="contact.html">Prem Udyog</a>
+                                        </li>
+                                        <li><a href="contact2.html">Prem Products</a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <!--/.nav-collapse -->
+
+
+
+                       
+
+                    </div>
+
+
+                </div>
+                <!-- /#navbar -->
+
+            </div>
+
+            <!-- *** NAVBAR END *** -->
+
+        </header>
+
+

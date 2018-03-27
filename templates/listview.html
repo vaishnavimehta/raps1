@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+{% include 'head.html' %} 
+</head>
+
+<body>
+
+    <div id="all">
+{% include 'nav.html' %}
+
+        <div id="heading-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h1>Catalog</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content">
+            
+            <div class="container">
+                {% for i in show %}
+                <div class="row">
+
+                    <section>
+                        
+
+                        <div class="col-md-4">
+                            <img class="img-responsive" src="{{i.image}}" style="height:150px" alt="{{i.image}}">
+                            <!-- /.project owl-slider -->
+
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="project-more">
+                                <h4>LINK:</h4>
+                                <p>{{i.image}}</p>
+                                <h4>ID:</h4>
+                                <p>{{i.id}}</p>                            
+                                <form method="POST" action="./catalogedit" id="edit_form_{{i.id}}" style="display:none">
+                                    <input name="id" value="{{i.id}}">
+                                    <input name="link" id="link_{{i.id}}" value="">
+                                </form>
+                                <button onclick="uplink({{i.id}})" type="" name='prompt' id="delete_form">EDIT</button>
+                                <form method="POST" action="./catalogdelete" id="delete_form_{{i.id}}">
+                                    <input type="hidden" name="id" value="{{i.id}}">
+                                </form>
+                                <button onclick="delink({{i.id}})">DELETE</button>
+                            </div>
+                        </div>
+                        
+                        
+                    </section>
+
+                </div>
+                <hr style="border-color: #CCCCCC;width:100%">
+                {% endfor %}
+                <br>
+
+            </div>
+            
+            <!-- /.container -->
+
+
+        </div>
+        <!-- /#content -->
+       <!-- *** FOOTER ***
+_________________________________________________________ -->
+ <footer id="footer">
+            <div class="container">
+                <div class="col-md-6 col-sm-6">
+                    <h4>About us</h4>
+
+                    <p>We are utensil manufacturers who believe in excellence.</p>
+
+                    
+                    <hr class="hidden-md hidden-lg hidden-sm">
+
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+
+                    <h4>Contact</h4>
+
+                    <p><strong>Prem Udyog</strong>
+                        <br>Manohar Colony ,
+                        <br>Jagadhri
+                        <br>135001
+                        <strong>India</strong>
+                    </p>
+
+                    <a href="contact.html" class="btn btn-small btn-template-main">Go to contact page</a>
+
+                    <hr class="hidden-md hidden-lg hidden-sm">
+
+                </div>
+				
+
+            </div>
+            <!-- /.container -->
+        </footer>
+        <!-- /#footer -->
+
+        <!-- *** FOOTER END *** -->
+
+        <!-- *** COPYRIGHT ***
+_________________________________________________________ -->
+
+         <div id="copyright">
+            <div class="container">
+                <div class="col-md-12">
+                    <p class="pull-left">&copy; Prem Udyog</p>
+                    <!-- <p class="pull-right">Template by <a href="https://bootstrapious.com">Bootstrapious</a> & <a href="https://remoteplease.com">Remote Please</a> -->
+                         <!-- Not removing these links is part of the license conditions of the template. Thanks for understanding :) If you want to use the template without the attribution links, you can do so after supporting further themes development at https://bootstrapious.com/donate  -->
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <!-- /#copyright -->
+
+        <!-- *** COPYRIGHT END *** -->
+
+
+
+    </div>
+    <!-- /#all -->
+
+    <!-- #### JAVASCRIPT FILES ### -->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js">
+    </script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <script src="{{ url_for('static', filename='jquery.cookie.js') }}"></script>
+    <script src="{{ url_for('static', filename='waypoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.counterup.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.parallax-1.1.3.js') }}"></script>
+    <script src="{{ url_for('static', filename='front.js') }}"></script>
+    <script>
+        function delink(id){
+            if (confirm('Are you sure you want to delete this image?')){
+                document.getElementById("delete_form_"+id).submit();
+            }
+        }
+        function uplink(id){
+            link = document.getElementById("link_"+id);
+            link.value = prompt('Enter new link');
+            if(link.value){
+                document.getElementById("edit_form_"+id).submit();
+            }
+            else alert("edit cancelled or new link='NULL'")
+        }
+    </script>
+    
+    
+
+    
+
+
+</body>
+
+</html>
