@@ -1,8 +1,8 @@
 #import files
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,func
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base,Catalog,Product,Event,Bestseller,Ware,User
+from database_setup import Base,Catalog,Product,Event,Bestseller,Ware,User,Cart
 from flask import session as login_session
 import random
 import string
@@ -377,6 +377,92 @@ def eventedit():
 			print("NULL")
 		return redirect(url_for('eventeditform', eid = id, method='GET' ))
 
+@app.route('/addtocart/<string:productid>', methods=['GET', 'POST'])
+def addtocart(productid):
+	if 'username' not in login_session:
+		flash("Restricted access")
+		return redirect('/restaurants')
+	if request.method == 'POST':
+		us = login_session['user_id']
+		cid = productid+str(us)
+		exist = session.query(Cart).filter_by(id=cid)
+		currentuser = session.query(User).filter_by( id = us )
+		print(currentuser)
+		if exist.count():
+			flash("Item already exists in cart")
+			return redirect(url_for('showcart', userid = us, total=0 ))
+		else:
+			qty = request.form.get("qty")
+			qty = int(qty)
+			item= session.query(Product).filter_by(id=productid).first()
+			amt= item.price * qty
+			newcart = Cart(id=cid, user_id=us, product_id=productid, price=item.price, quantity=qty,
+			image=item.image, amount= amt)
+			session.add(newcart)
+			session.commit()
+			return redirect(url_for('showcart', userid = us,total=0 ))
+		
+@app.route('/user/JSON')
+def userJSON():
+    items = session.query(User).all()
+    return jsonify(User=[i.ser for i in items])
+
+
+@app.route('/showcart/<int:userid>')
+def showcart(userid):
+	if 'username' not in login_session:
+		flash("Restricted access")
+		return redirect('/restaurants')
+	chaf = session.query(Product).filter_by(catagory="CD")
+	table = session.query(Product).filter_by(catagory="TW")
+	house = session.query(Product).filter_by(catagory="HW")
+	counter = session.query(Product).filter_by(catagory="CN")
+	tab = session.query(Product).filter_by(catagory="TB")
+	show = session.query(Cart).filter_by(user_id=userid)
+	return render_template('showcart.html', table=table, house=house, counter=counter, tab=tab, show=show,flag=5,log=1)
+
+@app.route('/cartedit', methods=['GET', 'POST'])
+def cartedit():
+	if 'username' not in login_session:
+		flash("Restricted access")
+		return redirect('/restaurants')
+	if request.method == 'POST':
+		us = login_session['user_id']
+		id = request.form.get("id")
+		qty = int(request.form.get("qty"))
+		editedItem = session.query(Cart).filter_by(id=id).first()
+		if editedItem == None:
+			flash("incorrect cart id")
+			return redirect(url_for('showcart', userid = us ))
+		oldamount = editedItem.quantity * editedItem.price
+		editedItem.quantity=qty
+		newamount = qty * editedItem.price
+		editedItem.amount = newamount
+		#currentuser = session.query(User).filter_by( id = us )
+		#currentuser.amount = currentuser.amount +newamount - oldamount
+		session.add(editedItem)
+		session.commit()
+		#session.add(currentuser)
+		#session.commit()
+		return redirect(url_for('showcart', userid = us ))
+
+@app.route('/cartdelete', methods=['GET', 'POST'])
+def cartdelete():
+	if 'username' not in login_session:
+		flash("Restricted access")
+		return redirect('/restaurants')
+	if request.method == 'POST':
+		us = login_session['user_id']
+		id = request.form.get("id")
+		output=''
+		editedItem = session.query(Cart).filter_by(id=id).first()
+		if editedItem == None:
+			flash("incorrect cart id")
+			return redirect(url_for('showcart', userid = us ))
+		session.delete(editedItem)
+		session.commit()
+		return redirect(url_for('showcart', userid = us ))
+
 
 @app.route('/eventeditform/<int:eid>', methods=['GET', 'POST'])
 def eventeditform(eid):
@@ -456,10 +542,23 @@ def allproductcat(productcat):
 		else:
 			return render_template('counters.html', chaf=chaf, table=table, house=house, counter=counter, tab=tab,productcat=productcat, show=show, typ=typ,flag=2,log=2)
 
+@app.route('/payment', methods=['GET', 'POST'])
+def payment():
+	if 'username' not in login_session:
+		flash("Restricted access")
+		return redirect('/restaurants')
+	if request.method == 'POST':
+		us = login_session['user_id']
+		total = request.form.get("total")
+		##################################################################################
+		##################################################################################
+		################################   PAYMENT CODE   ################################
+		##################################################################################
+		##################################################################################
 
 def createUser(login_session):
 	newUser = User(name=login_session['username'], email=login_session[
-				   'email'], picture=login_session['picture'])
+				   'email'], picture=login_session['picture'], amount=0)
 	session.add(newUser)
 	session.commit()
 	user = session.query(User).filter_by(email=login_session['email']).one()
