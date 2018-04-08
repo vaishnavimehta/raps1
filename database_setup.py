@@ -64,8 +64,6 @@ class Catalog(Base):
 	__tablename__ = 'catalog'
 	id = Column(Integer,primary_key=True)
 	image = Column(String(200), unique=True)
-##############################################################################################
-
 
 class User(Base):
 	__tablename__ = 'user'
@@ -74,6 +72,7 @@ class User(Base):
 	name = Column(String(250), nullable=False)
 	email = Column(String(250), nullable=False)
 	picture = Column(String(250))
+	
 
 # We added this ser function to be able to send JSON objects in a
 # serializable format
@@ -85,43 +84,19 @@ class User(Base):
 			'id': self.id,
 		}
 
-
-class Restaurant(Base):
-	__tablename__ = 'restaurant'
-	name = Column(String(80), nullable = False)
-	id = Column(Integer, primary_key = True)
-	user_id = Column(Integer, ForeignKey('user.id'))
+class Cart(Base):
+	__tablename__ = 'cart'
+	id = Column(String(12),primary_key=True)
+	user_id = Column(String(6), ForeignKey('user.id'))
 	user = relationship(User)
-	@property
-	def ser(self):
+	product_id = Column(String(6), ForeignKey('product.id'))
+	product = relationship(Product)
+	price = Column(Integer, nullable=False)
+	quantity = Column(Integer, nullable=False)
+	image = Column(String(200), nullable=False)
+	amount = Column(Integer, nullable=False)
 
-		return {
-			'name': self.name,
-			'id': self.id,
-		}
-	
-
-class MenuItems(Base):
-	__tablename__ = 'menu_item'
-	name = Column(String(80), nullable = False)
-	id = Column(Integer, primary_key = True)
-	course = Column(String(250))
-	description = Column(String(250))
-	price = Column(String(8))
-	restaurant_id = Column(Integer, ForeignKey(Restaurant.id))
-	restaurant = relationship(Restaurant)
-	user_id = Column(Integer, ForeignKey('user.id'))
-	user = relationship(User)
-	@property
-	def serialize(self):
-
-		return {
-			'name': self.name,
-			'description': self.description,
-			'id': self.id,
-			'price': self.price,
-			'course': self.course,
-		}
+##############################################################################################
 
 
 	
